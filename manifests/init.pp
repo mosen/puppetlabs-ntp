@@ -94,6 +94,11 @@ class ntp($servers='UNSET',
         $servers_real = $servers
       }
     }
+    darwin: {
+      class { "ntp::darwin":
+        servers    => $servers,
+      }
+    }
     default: {
       $supported = false
       notify { "${module_name}_unsupported":
