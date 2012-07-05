@@ -28,14 +28,14 @@ class ntp::darwin(
 
 	exec { "Enable NTP":
 		command => "systemsetup -setusingnetworktime on",
-		unless  => "test `systemsetup -getusingnetworktime |grep \"On\"`",
-		path    => "/bin:/usr/sbin",
+		unless  => "systemsetup -getusingnetworktime |grep \"On\"",
+		path    => "/bin:/usr/bin:/usr/sbin",
  	}
 
  	exec { "Set NTP Server":
  		command => "systemsetup -setnetworktimeserver ${servers[0]}",
- 		unless  => "test `systemsetup -getnetworktimeserver |awk -F: '{print $2}'|cut -c 2-` = \"${servers[0]}\"",
- 		path    => "/bin:/usr/sbin",
+ 		unless  => "systemsetup -getnetworktimeserver |awk -F: '{print \$2}'|cut -c 2- |grep \"${servers[0]}\"",
+ 		path    => "/bin:/usr/bin:/usr/sbin",
  		require => Exec["Enable NTP"],
  	}
 
